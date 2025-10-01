@@ -35,3 +35,5 @@ build/
 
 # Vercel
 .vercel/
+
+test.py
