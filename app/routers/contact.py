@@ -46,7 +46,7 @@ async def send_mail(
         msg = MIMEText(body, _charset="utf-8")
         msg["Subject"] = subject
         msg["From"] = settings.EMAIL_USER
-        msg["To"] = settings.EMAIL_USER
+        msg["To"] = settings.CONTACT_EMAIL
 
         # SMTP 연결 및 메일 전송
         if settings.EMAIL_PROVIDER == "naver":
