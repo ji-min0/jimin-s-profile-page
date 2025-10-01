@@ -49,10 +49,22 @@ async def send_mail(
         msg["To"] = settings.EMAIL_USER
 
         # SMTP 연결 및 메일 전송
-        with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
-            server.starttls()
-            server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
-            server.send_message(msg)
+        if settings.EMAIL_PROVIDER == "naver":
+            # 네이버: SSL 사용
+            with smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
+                server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
+                server.send_message(msg)
+        else:
+            # Gmail: TLS 사용
+            with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
+                server.starttls()
+                server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
+                server.send_message(msg)
+
+        # with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
+        #     server.starttls()
+        #     server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
+        #     server.send_message(msg)
 
         result = "메일이 성공적으로 전송되었습니다."
     except Exception as e:
