@@ -42,11 +42,12 @@ async def send_mail(
 ):
     try:
         # 메일 내용 작성
-        body = f"보낸 사람: {name} ({email})\n\n{message}"
+        body = f"보낸 사람: {name} ({email})\n\n{message}" # 보낸 사람 이메일 포함
         msg = MIMEText(body, _charset="utf-8")
         msg["Subject"] = subject
         msg["From"] = settings.EMAIL_USER
         msg["To"] = settings.CONTACT_EMAIL
+        msg["Reply-To"] = email # 문의한 사람 이메일로 회신 가능
 
         # SMTP 연결 및 메일 전송
         if settings.EMAIL_PROVIDER == "naver":
