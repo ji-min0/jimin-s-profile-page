@@ -46,11 +46,10 @@ async def send_mail(
         msg = MIMEText(body, _charset="utf-8")
         msg["Subject"] = subject
         msg["From"] = settings.EMAIL_USER
-        msg["To"] = settings.CONTACT_EMAIL
-        msg["Reply-To"] = email # 문의한 사람 이메일로 회신 가능
+        msg["To"] = settings.EMAIL_USER
 
         # SMTP 연결 및 메일 전송
-        if settings.EMAIL_PROVIDER == "naver":
+        if settings.USE_SSL:
             # 네이버: SSL 사용
             with smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
                 server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
@@ -61,11 +60,6 @@ async def send_mail(
                 server.starttls()
                 server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
                 server.send_message(msg)
-
-        # with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
-        #     server.starttls()
-        #     server.login(settings.EMAIL_USER, settings.EMAIL_PASS)
-        #     server.send_message(msg)
 
         result = "메일이 성공적으로 전송되었습니다."
     except Exception as e:
